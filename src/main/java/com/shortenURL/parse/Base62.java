@@ -1,9 +1,6 @@
-package com.shortenURL.util;
+package com.shortenURL.parse;
 
-import org.springframework.stereotype.Component;
-
-@Component
-public class Base62Util implements ParseUtil {
+public class Base62 implements TextParse {
 
     static final char[] BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 

@@ -1,7 +1,7 @@
 package com.shortenURL.repository;
 
+import com.shortenURL.parse.TextParse;
 import com.shortenURL.domain.ShortenUrl;
-import com.shortenURL.util.Base62Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +15,12 @@ public class MemoryShortenUrlRepository implements ShortenUrlRepository {
     private static int sequence = 0;
 
     private ShortenUrl shortenUrl= new ShortenUrl();
-
     @Autowired
-    private Base62Util base62Util;
+    private TextParse textParse;
 
     @Override
     public Optional<ShortenUrl> save(String url) {
-        String id = base62Util.encoding(sequence);
+        String id = textParse.encoding(sequence);
         Optional<ShortenUrl> searchData = list.stream().filter(data -> data.getRealUrl().equals(id)).findFirst();
         if (!searchData.isEmpty()) {
             return searchData;
