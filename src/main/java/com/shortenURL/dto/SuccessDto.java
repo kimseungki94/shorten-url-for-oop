@@ -1,8 +1,5 @@
 package com.shortenURL.dto;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class SuccessDto {
     int code;
     String message;

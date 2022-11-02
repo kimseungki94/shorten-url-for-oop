@@ -1,8 +1,6 @@
 package com.shortenURL.repository;
 
-
 import com.shortenURL.domain.ShortenUrl;
-import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 

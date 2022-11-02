@@ -18,8 +18,9 @@ public class ShortenUrlService {
 
     @Autowired
     ShortenUrlRepository shortenUrlRepository;
-    @Autowired
-    SuccessDto successDto;
+
+    SuccessDto successDto = new SuccessDto();
+    HttpHeaders headers = new HttpHeaders();
 
     public ResponseEntity<SuccessDto> createUrl(String url) {
         Optional<ShortenUrl> shortenUrl = shortenUrlRepository.save(url);
@@ -33,7 +34,6 @@ public class ShortenUrlService {
     }
 
     public ResponseEntity findUrl(String key) throws URISyntaxException {
-        HttpHeaders headers = new HttpHeaders();
         Optional<ShortenUrl> url = shortenUrlRepository.findByRealUrl(key);
         if (!url.isEmpty()) {
             headers.setLocation(new URI(url.get().getRealUrl()));

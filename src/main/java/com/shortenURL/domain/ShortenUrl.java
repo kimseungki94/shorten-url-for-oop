@@ -2,13 +2,12 @@ package com.shortenURL.domain;
 
 import org.springframework.stereotype.Component;
 
-@Component
 public class ShortenUrl {
     private String url;
     private String realUrl;
     private long connectCount;
 
-    public void insertData(String url, String realUrl) {
+    public void insertDefaultData(String url, String realUrl) {
         this.url = url;
         this.realUrl = realUrl;
         this.connectCount = 0;

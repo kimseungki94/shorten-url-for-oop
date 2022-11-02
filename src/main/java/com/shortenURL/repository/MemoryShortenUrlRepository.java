@@ -14,20 +14,19 @@ public class MemoryShortenUrlRepository implements ShortenUrlRepository {
     private static ArrayList<ShortenUrl> list = new ArrayList<>();
     private static int sequence = 0;
 
-    @Autowired
-    private ShortenUrl shortenUrl;
+    private ShortenUrl shortenUrl= new ShortenUrl();
 
     @Autowired
     private Base62Util base62Util;
 
     @Override
-    public synchronized Optional<ShortenUrl> save(String url) {
+    public Optional<ShortenUrl> save(String url) {
         String id = base62Util.encoding(sequence);
         Optional<ShortenUrl> searchData = list.stream().filter(data -> data.getRealUrl().equals(id)).findFirst();
         if (!searchData.isEmpty()) {
             return searchData;
         } else {
-            shortenUrl.insertData(id, url);
+            shortenUrl.insertDefaultData(id, url);
             list.add(shortenUrl);
             sequence++;
             return Optional.ofNullable(shortenUrl);
