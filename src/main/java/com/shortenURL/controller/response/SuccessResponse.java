@@ -1,4 +1,4 @@
-package com.shortenURL.controller.resonse;
+package com.shortenURL.controller.response;
 
 public class SuccessResponse {
     int code;

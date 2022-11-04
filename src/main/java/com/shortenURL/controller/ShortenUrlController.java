@@ -1,7 +1,7 @@
 package com.shortenURL.controller;
 
 import com.shortenURL.dto.ShortenUrlDto;
-import com.shortenURL.controller.resonse.SuccessResponse;
+import com.shortenURL.controller.response.SuccessResponse;
 import com.shortenURL.service.ShortenUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
