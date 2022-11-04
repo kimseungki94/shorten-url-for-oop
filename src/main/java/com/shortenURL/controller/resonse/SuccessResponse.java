@@ -1,6 +1,6 @@
-package com.shortenURL.dto;
+package com.shortenURL.controller.resonse;
 
-public class SuccessDto {
+public class SuccessResponse {
     int code;
     String message;
     String url;

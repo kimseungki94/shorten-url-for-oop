@@ -1,7 +1,7 @@
 package com.shortenURL.controller;
 
-import com.shortenURL.domain.ShortenUrl;
-import com.shortenURL.dto.SuccessDto;
+import com.shortenURL.dto.ShortenUrlDto;
+import com.shortenURL.controller.resonse.SuccessResponse;
 import com.shortenURL.service.ShortenUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ public class ShortenUrlController {
     ShortenUrlService shortenUrlService;
 
     @PostMapping("/create")
-    public ResponseEntity<SuccessDto> createUrl(@RequestBody ShortenUrl url) {
+    public ResponseEntity<SuccessResponse> createUrl(@RequestBody ShortenUrlDto url) {
         return shortenUrlService.createUrl(url.getUrl());
     }
 
@@ -25,7 +25,7 @@ public class ShortenUrlController {
     }
 
     @GetMapping("/count/{key}")
-    public ResponseEntity<SuccessDto> searchCount(@PathVariable("key") String key) {
+    public ResponseEntity<SuccessResponse> searchCount(@PathVariable("key") String key) {
         return shortenUrlService.searchCount(key);
     }
 

@@ -1,8 +1,6 @@
-package com.shortenURL.domain;
+package com.shortenURL.dto;
 
-import org.springframework.stereotype.Component;
-
-public class ShortenUrl {
+public class ShortenUrlDto {
     private String url;
     private String realUrl;
     private long connectCount;

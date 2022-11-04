@@ -1,11 +1,11 @@
 package com.shortenURL.repository;
 
-import com.shortenURL.domain.ShortenUrl;
+import com.shortenURL.dto.ShortenUrlDto;
 
 import java.util.Optional;
 
 public interface ShortenUrlRepository {
-    public Optional<ShortenUrl> save(String id);
-    public Optional<ShortenUrl> findByRealUrl(String key);
+    public Optional<ShortenUrlDto> save(String id);
+    public Optional<ShortenUrlDto> findByRealUrl(String key);
 
 }

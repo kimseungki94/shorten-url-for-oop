@@ -1,7 +1,7 @@
 package com.shortenURL.service;
 
-import com.shortenURL.domain.ShortenUrl;
-import com.shortenURL.dto.SuccessDto;
+import com.shortenURL.dto.ShortenUrlDto;
+import com.shortenURL.controller.resonse.SuccessResponse;
 import com.shortenURL.repository.ShortenUrlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,22 +19,22 @@ public class ShortenUrlService {
     @Autowired
     ShortenUrlRepository shortenUrlRepository;
 
-    SuccessDto successDto = new SuccessDto();
+    SuccessResponse successResponse = new SuccessResponse();
     HttpHeaders headers = new HttpHeaders();
 
-    public ResponseEntity<SuccessDto> createUrl(String url) {
-        Optional<ShortenUrl> shortenUrl = shortenUrlRepository.save(url);
+    public ResponseEntity<SuccessResponse> createUrl(String url) {
+        Optional<ShortenUrlDto> shortenUrl = shortenUrlRepository.save(url);
         if (!shortenUrl.isEmpty()) {
-            successDto.insertData(200, "success", shortenUrl.get().getUrl());
-            return new ResponseEntity<>(successDto, HttpStatus.OK);
+            successResponse.insertData(HttpStatus.OK.value(), "success", shortenUrl.get().getUrl());
+            return new ResponseEntity<>(successResponse, HttpStatus.OK);
         }
-        successDto.insertData(404, "fail", null);
-        return new ResponseEntity<>(successDto, HttpStatus.NOT_FOUND);
+        successResponse.insertData(HttpStatus.BAD_REQUEST.value(), "fail", null);
+        return new ResponseEntity<>(successResponse, HttpStatus.BAD_REQUEST);
 
     }
 
     public ResponseEntity findUrl(String key) throws URISyntaxException {
-        Optional<ShortenUrl> url = shortenUrlRepository.findByRealUrl(key);
+        Optional<ShortenUrlDto> url = shortenUrlRepository.findByRealUrl(key);
         if (!url.isEmpty()) {
             headers.setLocation(new URI(url.get().getRealUrl()));
             return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
@@ -43,14 +43,14 @@ public class ShortenUrlService {
         }
     }
 
-    public ResponseEntity<SuccessDto> searchCount(String key) {
-        Optional<ShortenUrl> url = shortenUrlRepository.findByRealUrl(key);
+    public ResponseEntity<SuccessResponse> searchCount(String key) {
+        Optional<ShortenUrlDto> url = shortenUrlRepository.findByRealUrl(key);
         if (!url.isEmpty()) {
-            successDto.insertData(200, Long.toString(url.get().getConnectCount()), null);
-            return new ResponseEntity<>(successDto, HttpStatus.OK);
+            successResponse.insertData(HttpStatus.OK.value(), Long.toString(url.get().getConnectCount()), null);
+            return new ResponseEntity<>(successResponse, HttpStatus.OK);
         } else {
-            successDto.insertData(400, Long.toString(url.get().getConnectCount()), null);
-            return new ResponseEntity<>(successDto, HttpStatus.NOT_FOUND);
+            successResponse.insertData(HttpStatus.BAD_REQUEST.value(), Long.toString(url.get().getConnectCount()), null);
+            return new ResponseEntity<>(successResponse, HttpStatus.NOT_FOUND);
         }
     }
 }
