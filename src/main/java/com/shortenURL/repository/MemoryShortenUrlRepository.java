@@ -1,9 +1,6 @@
 package com.shortenURL.repository;
 
-import com.shortenURL.dto.CreateUrlDto;
-import com.shortenURL.dto.FindRealUrlDto;
-import com.shortenURL.dto.FindRequestCountDto;
-import com.shortenURL.entity.ShortenUrl;
+import com.shortenURL.domain.ShortenUrl;
 import com.shortenURL.utils.EncodingUtils;
 import org.springframework.stereotype.Repository;
 
@@ -17,31 +14,25 @@ public class MemoryShortenUrlRepository implements ShortenUrlRepository {
     private static int sequence = 1000000000;
 
     @Override
-    public Optional<CreateUrlDto> createUrl(CreateUrlDto createUrlDto) {
-        Optional<ShortenUrl> searchData = searchSameRealUrl(createUrlDto.getUrl());
-        if (!searchData.isEmpty()) {
-            return Optional.of(new CreateUrlDto(searchData.get().getShortUrl(), searchData.get().getRealUrl(), searchData.get().getConnectCount()));
-        } else {
-            String shortUrl = EncodingUtils.base62Encoding(sequence);
-            list.add(new ShortenUrl(shortUrl, createUrlDto.getUrl()));
-            sequence++;
-            return Optional.of(new CreateUrlDto(createUrlDto.getUrl(), shortUrl, 0));
-        }
+    public Optional<ShortenUrl> createUrl(ShortenUrl requestShortenUrl) {
+        Optional<ShortenUrl> searchData = Optional.of(searchSameRealUrl(requestShortenUrl.getRealUrl())
+                .orElseGet(() -> initCreateShortenUrl(requestShortenUrl)));
+
+        return Optional.of(new ShortenUrl(searchData.get().getShortUrl(), searchData.get().getRealUrl(), searchData.get().getConnectCount()));
     }
 
     @Override
-    public Optional<FindRealUrlDto> findByRealUrl(String shortenUrl) {
-        return Optional.ofNullable(new FindRealUrlDto(searchSameShortenUrl(shortenUrl).get().getRealUrl()));
+    public Optional<ShortenUrl> findByRealUrl(ShortenUrl shortenUrl) {
+        return Optional.ofNullable(new ShortenUrl(searchSameShortenUrl(shortenUrl.getRealUrl()).get().getRealUrl()));
     }
 
     @Override
-    public Optional<FindRequestCountDto> findByRequestCount(String shortUrl) {
-        Optional<ShortenUrl> shortenUrl = searchSameShortenUrl(shortUrl);
-        if (!shortenUrl.isEmpty()) {
-            int index = list.indexOf(shortenUrl.get());
-            list.set(index, new ShortenUrl(shortenUrl.get().getShortUrl(), shortenUrl.get().getRealUrl(), shortenUrl.get().getConnectCount() + 1));
-        }
-        return Optional.of(new FindRequestCountDto(shortenUrl.get().getShortUrl(), shortenUrl.get().getConnectCount() + 1));
+    public Optional<ShortenUrl> findByRequestCount(ShortenUrl requestShortenUrl) {
+        ShortenUrl shortenUrl = searchSameShortenUrl(requestShortenUrl.getShortUrl()).orElseThrow();
+        int index = list.indexOf(shortenUrl);
+        ShortenUrl editShortenUrl = new ShortenUrl(shortenUrl.getShortUrl(), shortenUrl.getRealUrl(), shortenUrl.getConnectCount() + 1);
+        list.set(index, editShortenUrl);
+        return Optional.ofNullable(editShortenUrl);
     }
 
     public Optional<ShortenUrl> searchSameShortenUrl(String shortenUrl) {
@@ -50,5 +41,12 @@ public class MemoryShortenUrlRepository implements ShortenUrlRepository {
 
     public Optional<ShortenUrl> searchSameRealUrl(String realUrl) {
         return list.stream().filter(url -> realUrl.equals(url.getRealUrl())).findFirst();
+    }
+
+    private ShortenUrl initCreateShortenUrl(ShortenUrl requestShortenUrl) {
+        String shortUrl = EncodingUtils.base62Encoding(sequence);
+        list.add(new ShortenUrl(shortUrl, requestShortenUrl.getRealUrl()));
+        sequence++;
+        return new ShortenUrl(shortUrl, requestShortenUrl.getRealUrl(), 0);
     }
 }

@@ -16,14 +16,22 @@ public class ShortenUrlService {
     ShortenUrlRepository shortenUrlRepository;
 
     public Optional<CreateUrlDto> createUrl(CreateUrlDto createUrlDto) {
-        return shortenUrlRepository.createUrl(createUrlDto);
+        return Optional.ofNullable(
+                createUrlDto.shortenUrlDtoConverter(
+                        shortenUrlRepository.createUrl(createUrlDto.shortenUrlDomainConverter(createUrlDto)).get()));
     }
 
     public Optional<FindRealUrlDto> findByRealUrl(String key) {
-        return shortenUrlRepository.findByRealUrl(key);
+        FindRealUrlDto findRealUrlDto = new FindRealUrlDto(key);
+        return Optional.ofNullable(findRealUrlDto.shortenUrlDtoConverter(
+                shortenUrlRepository.findByRealUrl(
+                        findRealUrlDto.shortenUrlDomainConverter(findRealUrlDto)).get()));
     }
 
     public Optional<FindRequestCountDto> searchCount(String key) {
-        return shortenUrlRepository.findByRequestCount(key);
+        FindRequestCountDto findRequestCountDto = new FindRequestCountDto(key);
+        return Optional.ofNullable(findRequestCountDto.shortenUrlDtoConverter(
+                shortenUrlRepository.findByRequestCount(
+                        findRequestCountDto.shortenUrlDomainConverter(findRequestCountDto)).get()));
     }
 }
