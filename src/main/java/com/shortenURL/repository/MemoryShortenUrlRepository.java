@@ -11,7 +11,6 @@ import java.util.Optional;
 public class MemoryShortenUrlRepository implements ShortenUrlRepository {
 
     private static ArrayList<ShortenUrl> list = new ArrayList<>();
-    private static int sequence = 1000000000;
 
     @Override
     public Optional<ShortenUrl> createUrl(ShortenUrl requestShortenUrl) {
@@ -44,9 +43,12 @@ public class MemoryShortenUrlRepository implements ShortenUrlRepository {
     }
 
     private ShortenUrl initCreateShortenUrl(ShortenUrl requestShortenUrl) {
-        String shortUrl = EncodingUtils.base62Encoding(sequence);
+        String shortUrl = EncodingUtils.base62Encoding(createShortenUrlSequence());
         list.add(new ShortenUrl(shortUrl, requestShortenUrl.getRealUrl()));
-        sequence++;
         return new ShortenUrl(shortUrl, requestShortenUrl.getRealUrl(), 0);
+    }
+
+    private int createShortenUrlSequence() {
+        return (int) (Math.random() * 1000000000);
     }
 }
