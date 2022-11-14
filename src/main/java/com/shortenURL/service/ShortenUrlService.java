@@ -1,5 +1,6 @@
 package com.shortenURL.service;
 
+import com.shortenURL.domain.ShortenUrl;
 import com.shortenURL.dto.CreateUrlDto;
 import com.shortenURL.dto.FindRealUrlDto;
 import com.shortenURL.dto.FindRequestCountDto;
@@ -16,22 +17,22 @@ public class ShortenUrlService {
     ShortenUrlRepository shortenUrlRepository;
 
     public Optional<CreateUrlDto> createUrl(CreateUrlDto createUrlDto) {
-        return Optional.ofNullable(
-                createUrlDto.shortenUrlDtoConverter(
-                        shortenUrlRepository.createUrl(createUrlDto.shortenUrlDomainConverter(createUrlDto)).get()));
+        ShortenUrl shortenUrl = shortenUrlRepository.createUrl(createUrlDto.shortenUrlDomainConverter(createUrlDto)).get();
+        Optional<CreateUrlDto> responseCreateUrlDto = Optional.ofNullable(createUrlDto.shortenUrlDtoConverter(shortenUrl));
+        return responseCreateUrlDto;
     }
 
     public Optional<FindRealUrlDto> findByRealUrl(String key) {
         FindRealUrlDto findRealUrlDto = new FindRealUrlDto(key);
-        return Optional.ofNullable(findRealUrlDto.shortenUrlDtoConverter(
-                shortenUrlRepository.findByRealUrl(
-                        findRealUrlDto.shortenUrlDomainConverter(findRealUrlDto)).get()));
+        ShortenUrl shortenUrl = shortenUrlRepository.findByRealUrl(findRealUrlDto.shortenUrlDomainConverter(findRealUrlDto)).get();
+        Optional<FindRealUrlDto> requestFindRealUrlDto = Optional.ofNullable(findRealUrlDto.shortenUrlDtoConverter(shortenUrl));
+        return requestFindRealUrlDto;
     }
 
     public Optional<FindRequestCountDto> searchCount(String key) {
         FindRequestCountDto findRequestCountDto = new FindRequestCountDto(key);
-        return Optional.ofNullable(findRequestCountDto.shortenUrlDtoConverter(
-                shortenUrlRepository.findByRequestCount(
-                        findRequestCountDto.shortenUrlDomainConverter(findRequestCountDto)).get()));
+        ShortenUrl shortenUrl = shortenUrlRepository.findByRequestCount(findRequestCountDto.shortenUrlDomainConverter(findRequestCountDto)).get();
+        Optional<FindRequestCountDto> responseFindRequestCountDto = Optional.ofNullable(findRequestCountDto.shortenUrlDtoConverter(shortenUrl));
+        return responseFindRequestCountDto;
     }
 }

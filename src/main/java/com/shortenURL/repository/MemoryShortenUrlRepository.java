@@ -17,7 +17,7 @@ public class MemoryShortenUrlRepository implements ShortenUrlRepository {
         Optional<ShortenUrl> searchData = Optional.of(searchSameRealUrl(requestShortenUrl.getRealUrl())
                 .orElseGet(() -> initCreateShortenUrl(requestShortenUrl)));
 
-        return Optional.of(new ShortenUrl(searchData.get().getShortUrl(), searchData.get().getRealUrl(), searchData.get().getConnectCount()));
+        return searchData;
     }
 
     @Override
