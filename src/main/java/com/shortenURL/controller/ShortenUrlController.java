@@ -21,19 +21,20 @@ public class ShortenUrlController {
     HttpHeaders headers = new HttpHeaders();
 
     @PostMapping("/")
-    public ResponseEntity<Object> createUrl(@RequestBody CreateUrlDto createUrlDto) {
-        return new ResponseEntity<>(shortenUrlService.createUrl(createUrlDto).get(), HttpStatus.OK);
+    public ResponseEntity createUrl(@RequestBody CreateUrlDto createUrlDto) {
+        Optional<CreateUrlDto> responseCreateUrlDto = shortenUrlService.createUrl(createUrlDto);
+        return new ResponseEntity<>(responseCreateUrlDto.get(), HttpStatus.OK);
     }
 
     @GetMapping("/{key}")
     public ResponseEntity searchUrl(@PathVariable("key") String key) throws URISyntaxException {
         Optional<FindRealUrlDto> byRealUrl = shortenUrlService.findByRealUrl(key);
-        headers.setLocation(new URI(shortenUrlService.findByRealUrl(key).get().getRealUrl()));
+        headers.setLocation(new URI(byRealUrl.get().getRealUrl()));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/shorten-url/{key}")
-    public ResponseEntity<Object> searchCount(@PathVariable("key") String key) {
+    public ResponseEntity searchCount(@PathVariable("key") String key) {
         return new ResponseEntity<>(shortenUrlService.searchCount(key), HttpStatus.OK);
     }
 }
