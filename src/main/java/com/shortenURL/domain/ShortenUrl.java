@@ -1,20 +1,33 @@
 package com.shortenURL.domain;
 
-import org.springframework.stereotype.Component;
-
 public class ShortenUrl {
-    private String url;
+    private String shortUrl;
     private String realUrl;
     private long connectCount;
 
-    public void insertDefaultData(String url, String realUrl) {
-        this.url = url;
+    public ShortenUrl(String realUrl) {
+        this.realUrl = realUrl;
+    }
+
+    public ShortenUrl(String shortUrl, String realUrl) {
+        this.shortUrl = shortUrl;
         this.realUrl = realUrl;
         this.connectCount = 0;
     }
 
-    public String getUrl() {
-        return url;
+    public ShortenUrl(String shortUrl, long connectCount) {
+        this.shortUrl = shortUrl;
+        this.connectCount = connectCount;
+    }
+
+    public ShortenUrl(String shortUrl, String realUrl, long connectCount) {
+        this.shortUrl = shortUrl;
+        this.realUrl = realUrl;
+        this.connectCount = connectCount;
+    }
+
+    public String getShortUrl() {
+        return shortUrl;
     }
 
     public String getRealUrl() {
@@ -23,9 +36,5 @@ public class ShortenUrl {
 
     public long getConnectCount() {
         return connectCount;
-    }
-
-    public void countConnect() {
-        this.connectCount += 1;
     }
 }

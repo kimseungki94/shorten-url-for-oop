@@ -1,11 +1,9 @@
-package com.shortenURL.parse;
+package com.shortenURL.utils;
 
-public class Base62 implements TextParse {
-
+public class EncodingUtils {
     static final char[] BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
-    @Override
-    public String encoding(int value) {
+    public static String base62Encoding(int value) {
         final StringBuilder sb = new StringBuilder();
         do {
             int i = value % 62;
@@ -14,5 +12,4 @@ public class Base62 implements TextParse {
         } while (value > 0);
         return sb.toString();
     }
-
 }
